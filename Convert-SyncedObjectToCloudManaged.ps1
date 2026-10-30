@@ -1,6 +1,7 @@
 ﻿[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Low')]
 param()
 
+try {
 $ErrorActionPreference = 'Stop'
 
 $moduleName = 'Microsoft.Graph.Authentication'
@@ -241,4 +242,14 @@ Write-Host "処理結果: 成功 $succeededCount 件 / 失敗 $failedCount 件"
 Write-Host "結果CSV: $resultPath"
 if ($failedCount -gt 0) {
     throw "$failedCount 件の変換に失敗しました。結果CSVを確認してください。"
+}
+}
+catch {
+    Write-Host ''
+    Write-Host '処理中にエラーが発生しました。' -ForegroundColor Red
+    Write-Host $_.Exception.Message -ForegroundColor Red
+}
+finally {
+    Write-Host ''
+    [void](Read-Host '処理が終了しました。Enterキーを押すとPowerShellを閉じます')
 }
